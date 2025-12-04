@@ -26,11 +26,16 @@
   gap: 30px;
 }
 
+.nav-links li,
 .nav-links li a {
   color: white;
+  cursor: pointer;
+}
+
+.nav-links li a {
   text-decoration: none;
   font-size: 1rem;
-  transition: color 0.3s;
+  transition: 0.3s;
 }
 
 .nav-links li a:hover {
@@ -55,22 +60,61 @@
   transition: 0.3s;
 }
 
-/* Mobile Menu Hidden by Default */
-.nav-links.mobile-hidden {
-  display: none;
-}
-
-/* Mobile Menu Open */
-.nav-links.mobile-show {
+/* ===========================
+      MOBILE DRAWER MENU
+=========================== */
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: -260px;        /* Hidden off-screen */
+  width: 260px;
+  height: 100%;
+  background: #1f2937;
+  padding: 20px;
+  z-index: 2000;
+  transition: 0.3s ease;
   display: flex;
   flex-direction: column;
-  background: #1f2937;
+}
+
+.mobile-drawer.show {
+  right: 0;
+}
+
+.drawer-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+  align-self: flex-end;
+}
+
+.mobile-drawer ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 40px;
+}
+
+.mobile-drawer ul li {
+  margin-bottom: 20px;
+}
+
+.mobile-drawer ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+/* Background overlay when drawer is open */
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  padding: 20px 0;
-  margin-top: 15px;
-  gap: 20px;
-  text-align: center;
-  border-top: 1px solid #374151;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 1500;
 }
 
 /* ===========================
@@ -91,11 +135,11 @@
 /* Mobile */
 @media (max-width: 768px) {
   .nav-links {
-    display: none; /* Hidden by default */
+    display: none; /* Hide desktop menu */
   }
 
   .hamburger {
-    display: flex;
+    display: flex; /* Show hamburger */
   }
 }
 
