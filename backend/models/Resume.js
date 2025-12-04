@@ -1,15 +1,16 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const ResumeSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true },
-  phone: { type: String },
-  education: { type: String },
-  skills: { type: [String], default: [] },
-  coverLetter: { type: String },
-  resumeUrl: { type: String }, // path or external URL
-  createdAt: { type: Date, default: Date.now }
-});
+const ResumeSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    phone: { type: String },
+    message: { type: String }
+  },
+  {
+    timestamps: true,
+    collection: "Enquiry"  // MUST match your existing MongoDB collection
+  }
+);
 
-module.exports = mongoose.model("Enquiry", ResumeSchema, "Enquiry");
-
+module.exports = mongoose.model("Enquiry", ResumeSchema);
