@@ -6,6 +6,7 @@
   min-height: 100vh;
   background: #f5f6fa;
   font-family: "Poppins", sans-serif;
+  overflow-x: hidden;
 }
 
 /* ===========================
@@ -18,6 +19,7 @@
   padding: 25px 20px;
   display: flex;
   flex-direction: column;
+  transition: 0.3s ease-in-out;
 }
 
 .sidebar-title {
@@ -86,6 +88,7 @@
   display: flex;
   align-items: center;
   gap: 20px;
+  flex-wrap: wrap;
 }
 
 .sort-controls select {
@@ -114,14 +117,16 @@
 .table-container {
   background: white;
   border-radius: 10px;
-  padding: 10px;
+  padding: 15px;
   margin-top: 18px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  overflow-x: auto; /* TABLE MOBILE FIX */
 }
 
 .admin-table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 700px; /* Ensures table scrolls on mobile */
 }
 
 .admin-table thead {
@@ -140,7 +145,6 @@
   vertical-align: top;
 }
 
-/* Delete Button */
 .delete-btn {
   padding: 6px 12px;
   background: #e11d48;
@@ -198,6 +202,8 @@
 /* ===========================
       RESPONSIVE
 =========================== */
+
+/* Tablets */
 @media (max-width: 900px) {
   .admin-wrapper {
     flex-direction: column;
@@ -209,21 +215,30 @@
     justify-content: space-between;
     align-items: center;
     padding: 15px;
+    gap: 15px;
   }
 
   .sidebar-menu {
     display: flex;
     gap: 12px;
+    overflow-x: auto;
   }
 
-  .logout-btn {
-    margin-top: 0;
+  .sidebar-menu li {
+    flex: 1;
+    white-space: nowrap;
+  }
+
+  .admin-content {
+    padding: 20px;
   }
 }
 
+/* Mobile */
 @media (max-width: 600px) {
   .admin-sidebar {
     flex-direction: column;
+    align-items: stretch;
   }
 
   .sidebar-menu {
@@ -231,7 +246,34 @@
     width: 100%;
   }
 
+  .admin-topbar h1 {
+    font-size: 22px;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .top-actions {
+    justify-content: center;
+  }
+
   .admin-content {
     padding: 15px;
+  }
+}
+
+/* Extra-small mobile */
+@media (max-width: 400px) {
+  .sidebar-title {
+    font-size: 18px;
+  }
+
+  .admin-topbar h1 {
+    font-size: 20px;
+  }
+
+  .delete-btn {
+    padding: 5px 10px;
+    font-size: 13px;
   }
 }
