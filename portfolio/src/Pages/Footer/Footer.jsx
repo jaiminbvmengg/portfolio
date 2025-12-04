@@ -25,13 +25,13 @@ const Footer = () => {
         <div className="footer-right">
           <h3>Follow Me</h3>
           <div className="social-icons">
-            <a href="https://instagram.com" target="_blank" rel="noreferrer">
+            <a href="https://www.instagram.com/jaiminp_07?igsh=NXN1N3V5YWNsd2F0" target="_blank" rel="noreferrer">
               <FaInstagram />
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer">
+            <a href="https://www.linkedin.com/in/jaimin-parmar-758658284?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noreferrer">
               <FaLinkedin />
             </a>
-            <a href="https://github.com" target="_blank" rel="noreferrer">
+            <a href="https://github.com/jaiminbvmengg" target="_blank" rel="noreferrer">
               <FaGithub />
             </a>
           </div>
