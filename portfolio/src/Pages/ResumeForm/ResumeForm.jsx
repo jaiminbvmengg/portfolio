@@ -26,7 +26,7 @@ const ResumeForm = ({ isOpen, closeForm }) => {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5000/api/resumes", {
+      const res = await fetch("https://portfolio-f8i9.onrender.com/api/resumes", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -101,7 +101,7 @@ const ResumeForm = ({ isOpen, closeForm }) => {
             onChange={handleChange}
           />
 
-          <button type="submit" className="submit-btn">Submit</button>
+          <button type="submit" className="submit-btn">Submit</button>  
         </form>
       </div>
     </div>
