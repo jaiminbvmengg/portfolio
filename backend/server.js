@@ -4,8 +4,9 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 
-const resumeRouter = require("./backend/routes/resume");
-const adminRouter = require("./backend/routes/admin");
+const resumeRouter = require("./routes/resume");
+const adminRouter = require("./routes/admin");
+
 
 
 const app = express();
