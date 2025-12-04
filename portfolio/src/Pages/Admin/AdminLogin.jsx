@@ -4,16 +4,30 @@ const AdminLogin = ({ onLogin }) => {
   const [user, setUser] = useState("");
   const [pass, setPass] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const submit = async (e) => {
     e.preventDefault();
+    setError("");
+
+    // Frontend validation
+    if (!user.trim() || !pass.trim()) {
+      setError("Please enter username and password");
+      return;
+    }
 
     try {
+      setLoading(true);
+
       const res = await fetch("https://portfolio-f8i9.onrender.com/api/admin-login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user, pass }),
       });
+
+      if (!res.ok) {
+        throw new Error("Server not responding");
+      }
 
       const data = await res.json();
 
@@ -21,11 +35,13 @@ const AdminLogin = ({ onLogin }) => {
         localStorage.setItem("admin_auth", "yes");
         onLogin();
       } else {
-        setError("Invalid username or password");
+        setError(data.message || "Invalid username or password");
       }
     } catch (err) {
       console.error(err);
-      setError("Server error");
+      setError("Server error, please try again");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -50,7 +66,9 @@ const AdminLogin = ({ onLogin }) => {
           onChange={(e) => setPass(e.target.value)}
         />
 
-        <button type="submit">Login</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
       </form>
     </div>
   );
