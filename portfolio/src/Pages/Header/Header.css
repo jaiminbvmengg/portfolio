@@ -1,3 +1,6 @@
+/* ===========================
+      NAVBAR BASE STYLE
+=========================== */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -8,6 +11,7 @@
   position: sticky;
   top: 0;
   z-index: 1000;
+  transition: 0.3s ease-in-out;
 }
 
 .logo {
@@ -15,6 +19,7 @@
   font-weight: bold;
 }
 
+/* Desktop Menu */
 .nav-links {
   list-style: none;
   display: flex;
@@ -30,4 +35,73 @@
 
 .nav-links li a:hover {
   color: #60a5fa;
+}
+
+/* ===========================
+      HAMBURGER MENU (MOBILE)
+=========================== */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.hamburger div {
+  width: 25px;
+  height: 3px;
+  background: white;
+  border-radius: 3px;
+  transition: 0.3s;
+}
+
+/* Mobile Menu Hidden by Default */
+.nav-links.mobile-hidden {
+  display: none;
+}
+
+/* Mobile Menu Open */
+.nav-links.mobile-show {
+  display: flex;
+  flex-direction: column;
+  background: #1f2937;
+  width: 100%;
+  padding: 20px 0;
+  margin-top: 15px;
+  gap: 20px;
+  text-align: center;
+  border-top: 1px solid #374151;
+}
+
+/* ===========================
+      RESPONSIVE DESIGN
+=========================== */
+
+/* Tablets */
+@media (max-width: 900px) {
+  .navbar {
+    padding: 15px 30px;
+  }
+
+  .nav-links {
+    gap: 20px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none; /* Hidden by default */
+  }
+
+  .hamburger {
+    display: flex;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .logo {
+    font-size: 1.3rem;
+  }
 }
