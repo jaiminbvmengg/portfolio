@@ -1,33 +1,55 @@
 import React, { useState } from "react";
-import "./Admin.css";
 
 const AdminLogin = ({ onLogin }) => {
-  const [password, setPassword] = useState("");
+  const [user, setUser] = useState("");
+  const [pass, setPass] = useState("");
+  const [error, setError] = useState("");
 
-  const handleLogin = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
 
-    // simple static password (you can improve later)
-    if (password === "admin123") {
-      localStorage.setItem("admin_auth", "true");
-      onLogin(true);
-    } else {
-      alert("Incorrect Password");
+    try {
+      const res = await fetch("https://portfolio-f8i9.onrender.com/api/admin-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user, pass }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        localStorage.setItem("admin_auth", "yes");
+        onLogin();
+      } else {
+        setError("Invalid username or password");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Server error");
     }
   };
 
   return (
-    <div className="admin-login-container">
+    <div className="login-wrapper">
       <h2>Admin Login</h2>
 
-      <form onSubmit={handleLogin}>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      <form onSubmit={submit}>
+        <input
+          type="text"
+          placeholder="Username"
+          value={user}
+          onChange={(e) => setUser(e.target.value)}
+        />
+
         <input
           type="password"
-          placeholder="Enter admin password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
+          placeholder="Password"
+          value={pass}
+          onChange={(e) => setPass(e.target.value)}
         />
+
         <button type="submit">Login</button>
       </form>
     </div>
