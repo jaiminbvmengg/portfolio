@@ -4,8 +4,9 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 
-const resumeRouter = require('./routes/resume');
-const adminRouter = require('./routes/admin');  // <-- added this
+const resumeRouter = require("./backend/routes/resume");
+const adminRouter = require("./backend/routes/admin");
+
 
 const app = express();
 app.use(cors());
@@ -15,8 +16,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ROUTES
+// ROUTES
 app.use('/api/resumes', resumeRouter);
-app.use('/api', adminRouter);   // <-- added this (important)
+app.use('/api', adminRouter);
+
 
 // Health check
 app.get('/api/health', (req, res) => res.json({ ok: true }));
