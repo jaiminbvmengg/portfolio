@@ -36,7 +36,14 @@ function App() {
       <Routes>
         <Route path="/" element={<Home openResumeForm={() => setShowResumeForm(true)} />} />
 
-        <Route path="/admin" element={<AdminLogin />} />
+        <Route
+  path="/admin"
+  element={
+    localStorage.getItem("admin_auth") === "yes"
+      ? <AdminDashboard />
+      : <AdminLogin onLogin={() => window.location.href = "/admin"} />
+  }
+/>
         <Route path="/dashboard" element={<AdminDashboard />} />
         <Route path="/charts" element={<AdminCharts />} />
       </Routes>
