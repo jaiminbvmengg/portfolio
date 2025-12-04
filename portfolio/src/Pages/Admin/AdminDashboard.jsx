@@ -3,37 +3,28 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Admin.css";
 
-/**
- * Admin Dashboard
- * - Search
- * - Sorting (Name A→Z, Z→A, Newest, Oldest)
- * - Pagination (10 rows per page)
- * - Delete entry
- * - Navigation to Charts page and Logout
- *
- * Make sure your backend GET endpoint is: GET /api/resumes
- * and DELETE endpoint is: DELETE /api/resumes/:id
- */
-
 const PAGE_SIZE = 10;
+
+// 🔥 Set your backend URL here (Render backend)
+const API_BASE = "https://portfolio-f8i9.onrender.com/api/resumes";
 
 const AdminDashboard = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // UI state
   const [search, setSearch] = useState("");
-  const [sortBy, setSortBy] = useState("newest"); // newest | oldest | name-asc | name-desc
+  const [sortBy, setSortBy] = useState("newest");
   const [page, setPage] = useState(1);
 
   const navigate = useNavigate();
 
-  // Fetch data from backend
+  // Fetch all enquiries
   const loadData = async () => {
     try {
       setLoading(true);
-      const res = await fetch("/api/resumes"); // assumes same origin or proxy set
+      const res = await fetch(API_BASE);
       const json = await res.json();
+
       if (json && json.success) {
         setData(json.data || []);
       } else {
@@ -55,46 +46,42 @@ const AdminDashboard = () => {
   const deleteEntry = async (id) => {
     if (!window.confirm("Delete this enquiry?")) return;
     try {
-      await fetch(`/api/resumes/${id}`, { method: "DELETE" });
-      // if success, reload
-      loadData();
+      await fetch(`${API_BASE}/${id}`, { method: "DELETE" });
+      loadData(); // refresh list
     } catch (err) {
-      console.error("Failed to delete:", err);
+      console.error("Delete failed:", err);
       alert("Delete failed");
     }
   };
 
-  // Logout handler
+  // Logout
   const logout = () => {
     localStorage.removeItem("admin_auth");
     navigate("/admin");
   };
 
-  // Derived / filtered list
+  // Search + Sort + Filter
   const filtered = useMemo(() => {
-    if (!data || data.length === 0) return [];
+    if (!data.length) return [];
+
     const q = search.trim().toLowerCase();
+
     let list = data.filter((it) => {
       if (!q) return true;
-      const name = String(it.name || "").toLowerCase();
-      const email = String(it.email || "").toLowerCase();
-      const phone = String(it.phone || "").toLowerCase();
-      const msg = String(it.message || "").toLowerCase();
       return (
-        name.includes(q) ||
-        email.includes(q) ||
-        phone.includes(q) ||
-        msg.includes(q)
+        String(it.name).toLowerCase().includes(q) ||
+        String(it.email).toLowerCase().includes(q) ||
+        String(it.phone).toLowerCase().includes(q) ||
+        String(it.message).toLowerCase().includes(q)
       );
     });
 
-    // Sorting
     switch (sortBy) {
       case "name-asc":
-        list.sort((a, b) => (String(a.name || "").localeCompare(b.name || "")));
+        list.sort((a, b) => a.name.localeCompare(b.name));
         break;
       case "name-desc":
-        list.sort((a, b) => (String(b.name || "").localeCompare(a.name || "")));
+        list.sort((a, b) => b.name.localeCompare(a.name));
         break;
       case "oldest":
         list.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
@@ -110,31 +97,28 @@ const AdminDashboard = () => {
 
   // Pagination
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+
   useEffect(() => {
     if (page > pageCount) setPage(pageCount);
-  }, [pageCount, page]);
+  }, [pageCount]);
 
   const pageData = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
     <div className="admin-wrapper">
-      {/* Sidebar */}
       <aside className="admin-sidebar">
         <h2 className="sidebar-title">ADMIN</h2>
-
         <ul className="sidebar-menu">
           <li className="active">Dashboard</li>
           <li onClick={() => navigate("/charts")} style={{ cursor: "pointer" }}>
             Charts
           </li>
         </ul>
-
         <button className="logout-btn" onClick={logout}>
           Logout
         </button>
       </aside>
 
-      {/* Main Content */}
       <main className="admin-content">
         <div className="admin-topbar">
           <h1>Enquiries</h1>
@@ -157,7 +141,6 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Search */}
         <div className="search-container" style={{ marginTop: 12 }}>
           <input
             type="text"
@@ -175,25 +158,25 @@ const AdminDashboard = () => {
           <table className="admin-table">
             <thead>
               <tr>
-                <th style={{ width: "18%" }}>Name</th>
-                <th style={{ width: "22%" }}>Email</th>
-                <th style={{ width: "12%" }}>Phone</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
                 <th>Message</th>
-                <th style={{ width: "14%" }}>Date</th>
-                <th style={{ width: "8%" }}>Action</th>
+                <th>Date</th>
+                <th style={{ width: "80px" }}>Action</th>
               </tr>
             </thead>
 
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="6" style={{ textAlign: "center", padding: 24 }}>
+                  <td colSpan="6" style={{ textAlign: "center" }}>
                     Loading...
                   </td>
                 </tr>
               ) : pageData.length === 0 ? (
                 <tr>
-                  <td colSpan="6" style={{ textAlign: "center", padding: 24 }}>
+                  <td colSpan="6" style={{ textAlign: "center" }}>
                     No enquiries found.
                   </td>
                 </tr>
@@ -203,9 +186,7 @@ const AdminDashboard = () => {
                     <td>{item.name}</td>
                     <td>{item.email}</td>
                     <td>{item.phone || "—"}</td>
-                    <td style={{ maxWidth: 420, whiteSpace: "pre-wrap" }}>
-                      {item.message || "—"}
-                    </td>
+                    <td>{item.message || "—"}</td>
                     <td>{new Date(item.createdAt).toLocaleString()}</td>
                     <td>
                       <button
@@ -222,36 +203,27 @@ const AdminDashboard = () => {
           </table>
         </div>
 
-        {/* Pagination controls */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginTop: 16,
-          }}
-        >
-          <div>
-            <button
-              className="page-btn"
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={page === 1}
-            >
-              Previous
-            </button>
-            <button
-              className="page-btn"
-              onClick={() => setPage((p) => Math.min(pageCount, p + 1))}
-              disabled={page === pageCount}
-              style={{ marginLeft: 8 }}
-            >
-              Next
-            </button>
-          </div>
+        {/* Pagination */}
+        <div className="pagination-footer">
+          <button
+            className="page-btn"
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page === 1}
+          >
+            Previous
+          </button>
 
-          <div style={{ color: "#555" }}>
-            Page {page} of {pageCount} — {filtered.length} enquiries
-          </div>
+          <span style={{ padding: "0 10px" }}>
+            Page {page} of {pageCount}
+          </span>
+
+          <button
+            className="page-btn"
+            onClick={() => setPage((p) => Math.min(pageCount, p + 1))}
+            disabled={page === pageCount}
+          >
+            Next
+          </button>
         </div>
       </main>
     </div>
