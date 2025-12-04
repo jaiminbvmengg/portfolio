@@ -4,8 +4,8 @@ const router = express.Router();
 router.post("/admin-login", (req, res) => {
   const { user, pass } = req.body;
 
-  const ADMIN_USER = "admin";      // change to your username
-  const ADMIN_PASS = "admin123";   // change to your password
+  const ADMIN_USER = "admin";
+  const ADMIN_PASS = "admin123";
 
   if (user === ADMIN_USER && pass === ADMIN_PASS) {
     return res.json({ success: true });
