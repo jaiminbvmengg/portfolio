@@ -10,6 +10,7 @@
   font-weight: 700;
 }
 
+/* Main Layout */
 .skills-container {
   display: flex;
   justify-content: center;
@@ -17,6 +18,7 @@
   gap: 25px;
 }
 
+/* Card Style */
 .skill-card {
   background: white;
   width: 140px;
@@ -43,4 +45,76 @@
   font-size: 16px;
   font-weight: 600;
   margin: 0;
+}
+
+/* ===========================
+      RESPONSIVE DESIGN
+=========================== */
+
+/* Tablets */
+@media (max-width: 900px) {
+  .skills-title {
+    font-size: 28px;
+  }
+
+  .skill-card {
+    width: 160px;       /* Slightly bigger cards */
+    padding: 18px;
+  }
+
+  .skill-icon {
+    font-size: 38px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .skills-container {
+    gap: 20px;
+  }
+
+  .skill-card {
+    width: 45%;         /* Two cards per row */
+    max-width: 200px;
+  }
+
+  .skills-title {
+    font-size: 26px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .skill-card {
+    width: 100%;        /* One card per row */
+    max-width: 250px;
+    padding: 16px;
+  }
+
+  .skill-icon {
+    font-size: 34px;
+  }
+
+  .skill-card p {
+    font-size: 15px;
+  }
+
+  .skills-title {
+    font-size: 22px;
+  }
+}
+
+/* Extra Small Screens */
+@media (max-width: 360px) {
+  .skill-card {
+    padding: 14px;
+  }
+
+  .skill-icon {
+    font-size: 30px;
+  }
+
+  .skill-card p {
+    font-size: 14px;
+  }
 }
